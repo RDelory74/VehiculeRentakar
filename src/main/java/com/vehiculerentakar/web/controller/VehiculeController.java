@@ -1,8 +1,8 @@
-package com.VehiculeRentakar.web.controller;
+package com.vehiculerentakar.web.controller;
 
 
-import com.VehiculeRentakar.web.model.Vehicule;
-import com.VehiculeRentakar.web.service.VehiculeService;
+import com.vehiculerentakar.web.model.Vehicule;
+import com.vehiculerentakar.web.service.VehiculeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

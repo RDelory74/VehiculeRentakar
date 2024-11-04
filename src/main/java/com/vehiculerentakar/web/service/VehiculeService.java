@@ -1,9 +1,8 @@
-package com.VehiculeRentakar.web.service;
+package com.vehiculerentakar.web.service;
 
 
-import com.VehiculeRentakar.web.controller.VehiculeController;
-import com.VehiculeRentakar.web.model.Vehicule;
-import com.VehiculeRentakar.web.repository.VehiculeRepository;
+import com.vehiculerentakar.web.model.Vehicule;
+import com.vehiculerentakar.web.repository.VehiculeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -94,7 +93,5 @@ public class VehiculeService {
         }
         return true;  // Date disponible
     }
-
-
 
 }

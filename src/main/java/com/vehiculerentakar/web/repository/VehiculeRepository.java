@@ -1,7 +1,7 @@
-package com.VehiculeRentakar.web.repository;
+package com.vehiculerentakar.web.repository;
 
 
-import com.VehiculeRentakar.web.model.Vehicule;
+import com.vehiculerentakar.web.model.Vehicule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

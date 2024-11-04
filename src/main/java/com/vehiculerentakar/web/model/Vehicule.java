@@ -1,4 +1,4 @@
-package com.VehiculeRentakar.web.model;
+package com.vehiculerentakar.web.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
