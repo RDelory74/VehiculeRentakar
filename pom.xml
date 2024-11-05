@@ -8,7 +8,7 @@
 		<version>3.3.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.Rentakar</groupId>
+	<groupId>com.vehiculerentakar</groupId>
 	<artifactId>rentakar</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Rentakar</name>

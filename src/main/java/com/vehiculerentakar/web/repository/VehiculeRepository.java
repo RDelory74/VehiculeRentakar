@@ -28,3 +28,4 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Integer> {
     int updateKilometersById(@Param("id") int id, @Param("kilometer") int kilometer);
 
 }
+

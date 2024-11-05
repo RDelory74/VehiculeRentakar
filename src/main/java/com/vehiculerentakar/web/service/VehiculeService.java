@@ -1,25 +1,43 @@
 package com.vehiculerentakar.web.service;
 
 
+import com.vehiculerentakar.web.model.Order;
+import com.vehiculerentakar.web.model.User;
 import com.vehiculerentakar.web.model.Vehicule;
 import com.vehiculerentakar.web.repository.VehiculeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class VehiculeService {
 
     private final VehiculeRepository vehiculeRepository;
-    private final String orderServiceUrl = "http://localhost:9092/orders";
-    private final String userServiceUrl = "http://localhost:9093/Users";
-    private  RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
-    public VehiculeService(VehiculeRepository vehiculeRepository) {
+    @Value("${service.user.url}")
+    private String orderServiceUrl;
+
+    @Value("${service.order.url}")
+    private String vehicleServiceUrl;
+
+    @Value("${service.license.url}")
+    private String licenseServiceUrl;
+
+    @Autowired
+    public VehiculeService(VehiculeRepository vehiculeRepository, RestTemplate restTemplate) {
         this.vehiculeRepository = vehiculeRepository;
+        this.restTemplate = restTemplate;
     }
 
     public List<Vehicule> getAllVehicules(){
@@ -74,24 +92,43 @@ public class VehiculeService {
         vehiculeRepository.deleteById(id);
     }
 
+    public List<Vehicule> getAvailableVehicles(LocalDate startDate, LocalDate endDate) {
+        List<Vehicule> allVehicles = vehiculeRepository.findAll();
+        return allVehicles.stream()
+                .filter(vehicle -> isVehicleAvailable(vehicle.getId(), startDate, endDate))
+                .collect(Collectors.toList());
+    }
+    public boolean isVehicleAvailable(int vehiculeId, LocalDate startDate, LocalDate endDate) {
+        try {
+            String url = UriComponentsBuilder.fromHttpUrl(orderServiceUrl + "/vehicule/" + vehiculeId)
+                    .build()
+                    .toUriString();
+            ResponseEntity<List<Order>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    new ParameterizedTypeReference<List<Order>>() {}
+            );
 
+            List<Order> orders = response.getBody();
+            if (orders == null) return true;
 
-    public boolean isDateAvailable(int id, LocalDate startDate, LocalDate endDate) {
-
-
-        List<Map<String, Object>> orders = restTemplate.getForObject(orderServiceUrl + "/" + id, List.class);
-
-        for (Map<String,Object> order : orders) {
-           LocalDate reservedStart = LocalDate.parse(order.get("startDate").toString());
-            LocalDate reservedEnd = LocalDate.parse(order.get("endDate").toString());
-
-
-            if ((startDate.isBefore(reservedEnd) && endDate.isAfter(reservedStart)) ||
-                    startDate.equals(reservedStart) || endDate.equals(reservedEnd)) {
-                return false;  // Date indisponible
-            }
+            return orders.stream().noneMatch(order ->
+                    isDateOverlapping(
+                            startDate,
+                            endDate,
+                            order.getStartDate(),
+                            order.getEndDate()
+                    )
+            );
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la vérification de disponibilité: " + e.getMessage());
+            throw new RuntimeException("Impossible de vérifier la disponibilité du véhicule", e);
         }
-        return true;  // Date disponible
+    }
+    private boolean isDateOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+        return (start1.isBefore(end2) || start1.isEqual(end2))
+                && (end1.isAfter(start2) || end1.isEqual(start2));
     }
 
 }

@@ -3,15 +3,15 @@ package com.vehiculerentakar.web.model;
 import java.time.LocalDate;
 
 public class Order {
-    private String orderId;
-    private String customerId;
-    private String vehiculeId;
+    private int id;
+    private int userId;
+    private int  vehiculeId;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public Order(String orderId, String customerId, String vehiculeId, LocalDate startDate, LocalDate endDate) {
-        this.orderId = orderId;
-        this.customerId = customerId;
+    public Order(int id, int userId, int vehiculeId, LocalDate startDate, LocalDate endDate) {
+        this.id = id;
+        this.userId = userId;
         this.vehiculeId = vehiculeId;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -21,27 +21,27 @@ public class Order {
 
     }
 
-    public String getOrderId() {
-        return orderId;
+    public int getId() {
+        return id;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public String getVehiculeId() {
+    public int getVehiculeId() {
         return vehiculeId;
     }
 
-    public void setVehiculeId(String vehiculeId) {
+    public void setVehiculeId(int vehiculeId) {
         this.vehiculeId = vehiculeId;
     }
 
