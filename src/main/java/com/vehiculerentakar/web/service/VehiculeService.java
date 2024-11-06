@@ -25,11 +25,11 @@ public class VehiculeService {
     private final VehiculeRepository vehiculeRepository;
     private final RestTemplate restTemplate;
 
-    @Value("${service.user.url}")
+    @Value("${service.order.url}")
     private String orderServiceUrl;
 
-    @Value("${service.order.url}")
-    private String vehicleServiceUrl;
+    @Value("${service.user.url}")
+    private String userServiceUrl;
 
     @Value("${service.license.url}")
     private String licenseServiceUrl;
@@ -54,6 +54,16 @@ public class VehiculeService {
         System.out.println("Vehicul with id: " + id + " found  ||");
         System.out.println(vehicule);
         return vehicule;
+    }
+
+    public int getDisplacementByid(int id){
+        System.out.print("Fetching Displacement by "+id+" ||");
+        return vehiculeRepository.getDisplacementByid(id);
+    }
+
+    public int getHorsePowerByid(int id){
+        System.out.print("Fetching Horsepower by "+id+" ||");
+        return vehiculeRepository.getHPById(id);
     }
 
     public Vehicule saveVehicule(Vehicule vehicule){
@@ -99,7 +109,7 @@ public class VehiculeService {
                 .collect(Collectors.toList());
     }
     public boolean isVehicleAvailable(int vehiculeId, LocalDate startDate, LocalDate endDate) {
-        try {
+        try {// http://localhost:9093/orders
             String url = UriComponentsBuilder.fromHttpUrl(orderServiceUrl + "/vehicule/" + vehiculeId)
                     .build()
                     .toUriString();

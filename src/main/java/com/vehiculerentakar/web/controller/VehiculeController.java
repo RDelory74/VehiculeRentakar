@@ -5,6 +5,8 @@ import com.vehiculerentakar.web.model.Vehicule;
 import com.vehiculerentakar.web.model.Order;
 import com.vehiculerentakar.web.model.User;
 import com.vehiculerentakar.web.service.VehiculeService;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -31,6 +33,14 @@ public class VehiculeController {
     public Vehicule getVehiculeByRegistration(@PathVariable String registration){
         return vehiculeService.getVehiculeByRegistration(registration);
     }
+    @GetMapping("/vehicule/displacement/{id}")
+    public int getdisplacement(@PathVariable int id){
+        return vehiculeService.getDisplacementByid(id);
+    }
+    @GetMapping("/vehicules/horsepower/{id}")
+    public int getHorsepowerById(@PathVariable int id){
+        return vehiculeService.getHorsePowerByid(id);
+    }
     @GetMapping("/vehicule/available")
     public List<Vehicule> getVehiculeAvailable(){
         return vehiculeService.getByAvailability();
@@ -51,8 +61,26 @@ public class VehiculeController {
     public void deleteVehicule(@PathVariable int id){
         vehiculeService.deleteVehicule(id);
     }
+
     @GetMapping("/vehicules/available/{startDate},{endDate}")
-    public List<Vehicule> getVehiculeByDate(@PathVariable LocalDate startDate, @PathVariable LocalDate endDate){
-        return vehiculeService.getAvailableVehicles(startDate,endDate);
+    public ResponseEntity<List<Vehicule>> getVehiculeByDate(
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
+
+        // Validation des dates
+        if (startDate == null || endDate == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (startDate.isAfter(endDate)) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
+        try {
+            List<Vehicule> availableVehicles = vehiculeService.getAvailableVehicles(startDate, endDate);
+            return ResponseEntity.ok(availableVehicles);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 
@@ -27,5 +28,10 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Integer> {
     @Query("UPDATE Vehicule v SET v.kilometer = :kilometer WHERE v.id = :id")
     int updateKilometersById(@Param("id") int id, @Param("kilometer") int kilometer);
 
+    @Query("SELECT u.displacement FROM Vehicule u WHERE u.id = :id")
+    int getDisplacementByid(int id);
+
+    @Query("SELECT u.horsePower FROM Vehicule u WHERE u.id = :id")
+    int getHPById(int id);
 }
 
