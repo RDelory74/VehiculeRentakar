@@ -16,7 +16,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -143,12 +142,12 @@ public class VehiculeService {
 
     public String getTypeById(int id){
         System.out.print("Fetching type by id ||");
-        return vehiculeRepository.findTypeById(id);
+        return vehiculeRepository.getTypeById(id);
     }
 
     public int getVehiculeCargoById(int id){
         System.out.print("Fetching Cargo by id ||");
-        return vehiculeRepository.findCargoById(id);
+        return vehiculeRepository.getCargoById(id);
     }
 
     // On va demander la date de debut la date de fin puis le nombre de kilomètres effectués
@@ -156,20 +155,19 @@ public class VehiculeService {
     // avant qu'il ne valide la reservation
 
     public double calculateAmountCatalog (int id, LocalDate startDate, LocalDate endDate, int estimateKm) {
-        double priceBase = calculateDayBooked(startDate,endDate)*((double) vehiculeRepository.getDisplacementByid(id) /10);
-        double priceKm = ((double) vehiculeRepository.getHPById(id) /100)*estimateKm;
-        if (vehiculeRepository.findTypeById(id).equalsIgnoreCase("voiture")){
+        double priceBase = calculateDayBooked(startDate,endDate)*(vehiculeRepository.getDisplacementByid(id) /10);
+        double priceKm = (vehiculeRepository.getHPById(id) /100)*estimateKm;
+        if (vehiculeRepository.getTypeById(id).equalsIgnoreCase("voiture")){
             double Amount = priceBase + priceKm;
             return Amount;
-        } else if (vehiculeRepository.findTypeById(id).equalsIgnoreCase("moto")){
+        } else if (vehiculeRepository.getTypeById(id).equalsIgnoreCase("moto")){
             double Amount = priceBase + vehiculeRepository.getDisplacementByid(id)*0.001 +priceKm;
             return Amount;
-        } else if (vehiculeRepository.findTypeById(id).equalsIgnoreCase("utilitaire")){
-            double Amount = priceBase + vehiculeRepository.findCargoById(id)*0.05 + priceKm;
+        } else if (vehiculeRepository.getTypeById(id).equalsIgnoreCase("utilitaire")){
+            double Amount = priceBase + vehiculeRepository.getCargoById(id)*0.05 + priceKm;
             return Amount;
         }
         throw new IllegalArgumentException("Invalid vehicle type for ID: " + id);
-
     }
     public int calculateDayBooked(LocalDate startDate, LocalDate endDate) {
         return Period.between(startDate, endDate).getDays();

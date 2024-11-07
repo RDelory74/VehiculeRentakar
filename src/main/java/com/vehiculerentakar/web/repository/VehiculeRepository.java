@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 
@@ -35,9 +34,9 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Integer> {
     int getHPById(int id);
 
     @Query ("Select t From Vehicule t Where t.id =:id")
-    String findTypeById(int id);
+    String getTypeById(int id);
 
     @Query ("Select c From Vehicule c Where c.id=:id")
-    int findCargoById(int id);
+    int getCargoById(int id);
 }
 

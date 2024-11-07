@@ -101,7 +101,7 @@ public class VehiculeController {
         }
     }
 
-    @GetMapping("/vehicules/pricecatalog/{id},{startDate},{endDate},{estimateKm}")
+    @GetMapping("/vehicules/pricecatalog/{id}/{startDate}/{endDate}/{estimateKm}")
     public double getSimulatedPrice (
             @PathVariable int id,
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate startDate,
