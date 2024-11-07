@@ -2,7 +2,6 @@ package com.vehiculerentakar.web.service;
 
 
 import com.vehiculerentakar.web.model.Order;
-import com.vehiculerentakar.web.model.User;
 import com.vehiculerentakar.web.model.Vehicule;
 import com.vehiculerentakar.web.repository.VehiculeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -105,7 +105,7 @@ public class VehiculeService {
     public List<Vehicule> getAvailableVehicles(LocalDate startDate, LocalDate endDate) {
         List<Vehicule> allVehicles = vehiculeRepository.findAll();
         return allVehicles.stream()
-                .filter(vehicle -> isVehicleAvailable(vehicle.getId(), startDate, endDate))
+                .filter(vehicule -> isVehicleAvailable(vehicule.getId(), startDate, endDate))
                 .collect(Collectors.toList());
     }
     public boolean isVehicleAvailable(int vehiculeId, LocalDate startDate, LocalDate endDate) {
@@ -141,4 +141,36 @@ public class VehiculeService {
                 && (end1.isAfter(start2) || end1.isEqual(start2));
     }
 
+    public String getTypeById(int id){
+        System.out.print("Fetching type by id ||");
+        return vehiculeRepository.findTypeById(id);
+    }
+
+    public int getVehiculeCargoById(int id){
+        System.out.print("Fetching Cargo by id ||");
+        return vehiculeRepository.findCargoById(id);
+    }
+
+    // On va demander la date de debut la date de fin puis le nombre de kilomètres effectués
+    // Cela va aficher un prix avant de créer une reservation, le but ici est d'apporter un aperçu du montant au client
+    // avant qu'il ne valide la reservation
+
+    public double calculateAmountCatalog (int id, LocalDate startDate, LocalDate endDate, int estimateKm) {
+        double priceBase = calculateDayBooked(startDate,endDate)*((double) vehiculeRepository.getDisplacementByid(id) /10);
+        double priceKm = ((double) vehiculeRepository.getHPById(id) /100)*estimateKm;
+        if (vehiculeRepository.findTypeById(id).equalsIgnoreCase("voiture")){
+            double Amount = priceBase + priceKm;
+            return Amount;
+        } else if (vehiculeRepository.findTypeById(id).equalsIgnoreCase("moto")){
+            double Amount = priceBase + vehiculeRepository.getDisplacementByid(id)*0.001 +priceKm;
+            return Amount;
+        } else if (vehiculeRepository.findTypeById(id).equalsIgnoreCase("utilitaire")){
+            double Amount = priceBase + vehiculeRepository.findCargoById(id)*0.05 + priceKm;
+            return Amount;
+        }
+        return calculateAmountCatalog(id, startDate, endDate, estimateKm);
+    }
+    public int calculateDayBooked(LocalDate startDate, LocalDate endDate) {
+        return Period.between(startDate, endDate).getDays();
+    }
 }
