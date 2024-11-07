@@ -33,10 +33,10 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Integer> {
     @Query("SELECT u.horsePower FROM Vehicule u WHERE u.id = :id")
     int getHPById(int id);
 
-    @Query ("Select t From Vehicule t Where t.id =:id")
+    @Query ("Select t.type From Vehicule t Where t.id =:id")
     String getTypeById(int id);
 
-    @Query ("Select c From Vehicule c Where c.id=:id")
+    @Query ("Select c.cargo From Vehicule c Where c.id=:id")
     int getCargoById(int id);
 }
 

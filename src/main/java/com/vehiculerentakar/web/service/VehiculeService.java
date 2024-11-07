@@ -157,18 +157,23 @@ public class VehiculeService {
     public double calculateAmountCatalog (int id, LocalDate startDate, LocalDate endDate, int estimateKm) {
         double priceBase = calculateDayBooked(startDate,endDate)*(vehiculeRepository.getDisplacementByid(id) /10);
         double priceKm = (vehiculeRepository.getHPById(id) /100)*estimateKm;
+
         if (vehiculeRepository.getTypeById(id).equalsIgnoreCase("voiture")){
             double Amount = priceBase + priceKm;
+            System.out.println( Amount + "€");
             return Amount;
         } else if (vehiculeRepository.getTypeById(id).equalsIgnoreCase("moto")){
             double Amount = priceBase + vehiculeRepository.getDisplacementByid(id)*0.001 +priceKm;
+            System.out.println( Amount + "€");
             return Amount;
         } else if (vehiculeRepository.getTypeById(id).equalsIgnoreCase("utilitaire")){
             double Amount = priceBase + vehiculeRepository.getCargoById(id)*0.05 + priceKm;
+            System.out.println( Amount + "€");
             return Amount;
         }
         throw new IllegalArgumentException("Invalid vehicle type for ID: " + id);
     }
+
     public int calculateDayBooked(LocalDate startDate, LocalDate endDate) {
         return Period.between(startDate, endDate).getDays();
     }
