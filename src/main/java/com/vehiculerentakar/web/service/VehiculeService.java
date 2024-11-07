@@ -168,7 +168,8 @@ public class VehiculeService {
             double Amount = priceBase + vehiculeRepository.findCargoById(id)*0.05 + priceKm;
             return Amount;
         }
-        return calculateAmountCatalog(id, startDate, endDate, estimateKm);
+        throw new IllegalArgumentException("Invalid vehicle type for ID: " + id);
+
     }
     public int calculateDayBooked(LocalDate startDate, LocalDate endDate) {
         return Period.between(startDate, endDate).getDays();
