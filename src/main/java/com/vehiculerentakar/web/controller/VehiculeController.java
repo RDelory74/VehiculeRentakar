@@ -109,4 +109,9 @@ public class VehiculeController {
             @PathVariable int estimateKm){
         return vehiculeService.calculateAmountCatalog(id,startDate,endDate,estimateKm);
     }
+
+    @PutMapping("/vehicules/upOrderedVehicule/{id}")
+    public Vehicule updateOrderedById(@PathVariable int id,@RequestBody Vehicule vehicule) {
+        return vehiculeService.updateOrderedById(id, vehicule);
+    }
 }

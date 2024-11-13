@@ -27,8 +27,12 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Integer> {
     @Query("UPDATE Vehicule v SET v.kilometer = :kilometer WHERE v.id = :id")
     int updateKilometersById(@Param("id") int id, @Param("kilometer") int kilometer);
 
+    @Modifying
+    @Query("UPDATE Vehicule v SET v.isAvailable = :isAvailable WHERE v.id =:id")
+    Vehicule updateIsAvailableById(@Param("id") int id, @Param("isAvailable") boolean isAvailable);
+
     @Query("SELECT u.displacement FROM Vehicule u WHERE u.id = :id")
-    int getDisplacementByid(int id);
+    int getDisplacementByid(int id); // refaire
 
     @Query("SELECT u.horsePower FROM Vehicule u WHERE u.id = :id")
     int getHPById(int id);

@@ -24,10 +24,10 @@ public class VehiculeService {
     private final VehiculeRepository vehiculeRepository;
     private final RestTemplate restTemplate;
 
-    @Value("${service.order.url}")
+    @Value("${service.order.url:OrderRentakar}")
     private String orderServiceUrl;
 
-    @Value("${service.user.url}")
+    @Value("${service.order.url:UserRentakar}")
     private String userServiceUrl;
 
     @Value("${service.license.url}")
@@ -177,4 +177,9 @@ public class VehiculeService {
     public int calculateDayBooked(LocalDate startDate, LocalDate endDate) {
         return Period.between(startDate, endDate).getDays();
     }
+    public Vehicule updateOrderedById(int id, Vehicule vehicule){
+
+        return vehiculeRepository.findById(id).orElse(null);
+    }
+
 }
