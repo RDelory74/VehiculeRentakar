@@ -24,7 +24,7 @@ public class VehiculeService {
     private final VehiculeRepository vehiculeRepository;
     private final RestTemplate restTemplate;
 
-    @Value("${service.order.url:OrderRentakar}")
+    @Value("${service.order.url}")
     private String orderServiceUrl;
 
     @Value("${service.order.url:UserRentakar}")
