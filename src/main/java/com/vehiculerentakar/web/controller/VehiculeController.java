@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+import static jakarta.ws.rs.HttpMethod.*;
+
 @RestController
+@RequestMapping("/vehicules")
+@CrossOrigin
 public class VehiculeController {
 
     private final VehiculeService vehiculeService;
@@ -19,67 +23,67 @@ public class VehiculeController {
         this.vehiculeService = vehiculeService;
     }
 
-    @GetMapping("/vehicules")
+    @GetMapping
     public List<Vehicule> getAllVehicules() {
         return vehiculeService.getAllVehicules();
     }
 
-    @GetMapping("/vehicules/{id}")
+    @GetMapping("/id/{id}")
     public Vehicule getVehiculeById(@PathVariable int id) {
         return vehiculeService.getVehiculeById(id);
     }
 
-    @GetMapping("/vehicule/{registration}")
+    @GetMapping("/registration/{registration}")
     public Vehicule getVehiculeByRegistration(@PathVariable String registration) {
         return vehiculeService.getVehiculeByRegistration(registration);
     }
 
-    @GetMapping("/vehicules/displacement/{id}")
+    @GetMapping("/displacement/{id}")
     public int getdisplacement(@PathVariable int id) {
         return vehiculeService.getDisplacementByid(id);
     }
 
-    @GetMapping("/vehicules/horsepower/{id}")
+    @GetMapping("/horsepower/{id}")
     public int getHorsepowerById(@PathVariable int id) {
         return vehiculeService.getHorsePowerByid(id);
     }
 
-    @GetMapping("/vehicules/cargo/{id}")
+    @GetMapping("/cargo/{id}")
     public int getVehiculeCargoById(@PathVariable int id) {
         return vehiculeService.getVehiculeCargoById(id);
     }
 
-    @GetMapping("/vehicule/available")
+    @GetMapping("/available")
     public List<Vehicule> getVehiculeAvailable() {
         return vehiculeService.getByAvailability();
     }
 
-    @GetMapping("/vehicule/type/{type}")
+    @GetMapping("/typeName/{type}")
     public List<Vehicule> getVehiculeByType(@PathVariable String type) {
         return vehiculeService.findByType(type);
     }
 
-    @GetMapping("/vehicules/type/{id}")
+    @GetMapping("/type/{id}")
     public String getVehiculeTypeById(@PathVariable int id) {
         return vehiculeService.getTypeById(id);
     }
 
-    @PostMapping("/vehicules")
+    @PostMapping
     public Vehicule createVehicule(@RequestBody Vehicule vehicule) {
         return vehiculeService.saveVehicule(vehicule);
     }
 
-    @PutMapping("/vehicules/{id}")
+    @PutMapping("/{id}")
     public Vehicule updateVehiculeById(@PathVariable int id, @RequestBody Vehicule vehicule) {
         return vehiculeService.updateVehiculeById(id, vehicule);
     }
 
-    @DeleteMapping("/vehicule/{id}")
+    @DeleteMapping("/{id}")
     public void deleteVehicule(@PathVariable int id) {
         vehiculeService.deleteVehicule(id);
     }
 
-    @GetMapping("/vehicules/available/{startDate},{endDate}")
+    @GetMapping("/available/{startDate},{endDate}")
     public ResponseEntity<List<Vehicule>> getVehiculeByDate(
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate) {
@@ -101,7 +105,7 @@ public class VehiculeController {
         }
     }
 
-    @GetMapping("/vehicules/pricecatalog/{id}/{startDate}/{endDate}/{estimateKm}")
+    @GetMapping("/pricecatalog/{id}/{startDate}/{endDate}/{estimateKm}")
     public double getSimulatedPrice (
             @PathVariable int id,
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd")LocalDate startDate,
@@ -110,7 +114,7 @@ public class VehiculeController {
         return vehiculeService.calculateAmountCatalog(id,startDate,endDate,estimateKm);
     }
 
-    @PutMapping("/vehicules/upOrderedVehicule/{id}")
+    @PutMapping("/upOrderedVehicule/{id}")
     public Vehicule updateOrderedById(@PathVariable int id,@RequestBody Vehicule vehicule) {
         return vehiculeService.updateOrderedById(id, vehicule);
     }
